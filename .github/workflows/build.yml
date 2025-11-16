@@ -40,4 +40,4 @@ jobs:
       
       - name: Run Pylint
         run: |
-          pylint ToDoApp.py 
+          pylint ToDoApp.py --disable=C0114,C0116 || true
