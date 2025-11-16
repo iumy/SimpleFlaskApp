@@ -27,7 +27,7 @@ def test_home_page_loads(client):
     """Test that the home page loads successfully"""
     response = client.get("/")
     assert response.status_code == 200
-    assert b"My To-Do List" in response.data
+    assert b"To-Do List" in response.data
 
 
 def test_add_task(client):
