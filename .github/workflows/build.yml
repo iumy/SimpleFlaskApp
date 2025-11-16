@@ -31,16 +31,16 @@ jobs:
           pip install -r requirements.txt || pip install flask
       
       - name: Run Black (code formatting check)
-        run: black --check --diff ToDoapp.py test_ToDoapp.py
+        run: black --check --diff ToDoapp.py test_ToDoApp.py
         continue-on-error: true
       
       - name: Run Flake8
         run: |
-          flake8 ToDoApp.py test_ToDoapp.py --max-line-length=100 --statistics
+          flake8 ToDoApp.py test_ToDoApp.py --max-line-length=100 --statistics
       
       - name: Run Pylint
         run: |
-          pylint ToDoApp.py test_ToDoapp.py --disable=C0114,C0116 || true
+          pylint ToDoApp.py test_ToDoApp.py --disable=C0114,C0116 || true
 
  # Job 2: Unit Tests
   test:
