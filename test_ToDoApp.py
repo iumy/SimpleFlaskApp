@@ -1,8 +1,8 @@
 import pytest
 import sys
+from ToDoApp import app, tasks
 
 sys.path.insert(0, ".")
-from ToDoApp import app, tasks
 
 
 @pytest.fixture
@@ -53,7 +53,7 @@ def test_add_multiple_tasks(client):
 
 def test_add_empty_task(client):
     """Test that empty tasks are not added"""
-    response = client.post("/add", data={"task": ""}, follow_redirects=True)
+    client.post("/add", data={"task": ""}, follow_redirects=True)
     assert len(tasks) == 0
 
 
