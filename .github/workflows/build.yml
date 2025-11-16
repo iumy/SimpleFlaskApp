@@ -143,7 +143,7 @@ jobs:
   deploy-staging:
     name: Deploy to Staging (Docker)
     runs-on: ubuntu-latest  # Change to: self-hosted for self-hosted runner
-    needs: build
+    #needs: build
     environment:
       name: staging
       url: http://74.235.201.128
