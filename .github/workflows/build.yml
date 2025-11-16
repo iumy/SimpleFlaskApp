@@ -84,7 +84,7 @@ jobs:
   build:
     name: Build Docker Image
     runs-on: ubuntu-latest  # Change to: self-hosted for self-hosted runner
-    needs: [test, sonarqube]
+    needs: [test]
     
     steps:
       - name: Checkout code
