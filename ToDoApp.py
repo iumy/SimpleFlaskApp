@@ -108,7 +108,7 @@ HTML_TEMPLATE = """
     </div>
 </body>
 </html>
-"""
+"""  # noqa: W293
 
 
 @app.route("/")
