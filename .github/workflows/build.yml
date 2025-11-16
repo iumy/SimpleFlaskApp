@@ -147,7 +147,7 @@ jobs:
     environment:
       name: staging
       url: http://74.235.201.128
-    if: github.ref == 'refs/heads/develop'
+    if: github.ref == 'refs/heads/development'
     permissions:
       contents: read
       packages: read 
