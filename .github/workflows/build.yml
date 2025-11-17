@@ -13,7 +13,7 @@ jobs:
   # Job 1: Linting
   lint:
     name: Code Linting
-    runs-on: ubuntu-latest  # Change to: self-hosted for self-hosted runner
+    runs-on: ubuntu-latest  
     
     steps:
       - name: Checkout code
