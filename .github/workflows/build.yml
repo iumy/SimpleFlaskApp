@@ -104,7 +104,7 @@ jobs:
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
         with:
           args: >
-            -Dsonar.projectKey=flask-todo-app
+            -Dsonar.projectKey=iumy_SimpleFlaskApp
             -Dsonar.python.coverage.reportPaths=coverage.xml
             -Dsonar.sources=ToDoApp.py
             -Dsonar.tests=test_ToDoApp.py
