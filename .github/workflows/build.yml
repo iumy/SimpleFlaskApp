@@ -144,6 +144,10 @@ jobs:
     name: Deploy to Staging (Docker self hosted)
     runs-on: self-hosted
     needs: build
+
+    permissions:
+      contents: read
+      packages: write
   
     steps:
       - name: Login to GitHub Container Registry
