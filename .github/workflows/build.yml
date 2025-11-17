@@ -159,12 +159,12 @@ jobs:
               New-Item -ItemType Directory -Path $dockerConfig | Out-Null
           }
 
-          # Disable the Windows credential helper (wincred/desktop)
-          Set-Content -Path "$dockerConfig\config.json" -Value "{ `"credsStore`": `""` }"
+          # Disable Windows credential helper
+          Set-Content -Path "$dockerConfig\config.json" -Value '{ "credsStore": "" }'
 
           # Login to GHCR
-          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
-
+          $token = "${{ secrets.GITHUB_TOKEN }}"
+          $token | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
      
       - name: Pull latest image
         run: |
