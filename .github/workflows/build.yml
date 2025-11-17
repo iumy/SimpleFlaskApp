@@ -141,51 +141,37 @@ jobs:
 
  # Job 6: Deploy to Staging (Docker)
   deploy-staging:
-    name: Deploy to Staging (Docker)
-    runs-on: ubuntu-latest  # Change to: self-hosted for self-hosted runner
+    name: Deploy to Staging (Docker self hosted)
+    runs-on: self-hosted
     needs: build
-    environment:
-      name: staging
-      url: http://74.235.201.128
+   
     if: github.ref == 'refs/heads/development'
-    permissions:
-      contents: read
-      packages: read 
     
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - name: Login to GitHub Container Registry
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
       
-      - name: Convert repository name to lowercase
-        id: repo
-        run: echo "repository=$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_OUTPUT
+      - name: Pull latest image
+        run: |
+          docker pull ghcr.io/iumy/simpleflaskapp:develop
       
-      - name: Deploy to staging server via SSH
-        uses: appleboy/ssh-action@v1.0.0
-        with:
-          host: ${{ secrets.STAGING_HOST }}
-          username: ${{ secrets.STAGING_USER }}
-          key: ${{ secrets.STAGING_SSH_KEY }}
-          script: |
-            # Login to GitHub Container Registry
-            echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-            
-            # Pull the latest image
-            docker pull ghcr.io/${{ steps.repo.outputs.repository }}:develop
-            
-            # Stop and remove old container
-            docker stop flask-staging || true
-            docker rm flask-staging || true
-            
-            # Run new container
-            docker run -d \
-              --name flask-staging \
-              -p 7000:7000 \
-              --restart unless-stopped \
-              ghcr.io/${{ steps.repo.outputs.repository }}:develop
-            
-            # Clean up old images
-            docker image prune -f
+      - name: Stop old container
+        run: |
+          docker stop flask-staging
+          docker rm flask-staging
+        continue-on-error: true
+      
+      - name: Run new container
+        run: |
+          docker run -d `
+            --name flask-staging `
+            -p 7000:7000 `
+            --restart unless-stopped `
+            ghcr.io/iumy/simpleflaskapp:develop
+      
+      - name: Clean up old images
+        run: docker image prune -f
       
       - name: Health check
         run: |
