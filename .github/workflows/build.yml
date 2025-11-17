@@ -141,7 +141,7 @@ jobs:
 
  # Job 6: Deploy to Staging (Docker)
   deploy-staging:
-    name: Deploy to Staging (Docker self hosted)
+    name: Deploy to Staging (on Docker self hosted)
     runs-on: self-hosted
     needs: build
 
