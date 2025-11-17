@@ -108,6 +108,7 @@ jobs:
             -Dsonar.python.coverage.reportPaths=coverage.xml
             -Dsonar.sources=ToDoApp.py
             -Dsonar.tests=test_ToDoApp.py
+            -Dsonar.organization=iumy
       
       - name: SonarQube Quality Gate Check
         uses: sonarsource/sonarqube-quality-gate-action@master
@@ -120,7 +121,7 @@ jobs:
   build:
     name: Build Docker Image
     runs-on: ubuntu-latest  # Change to: self-hosted for self-hosted runner
-    needs: [test]
+    needs: [test, sonarqube]
     permissions:
       contents: read
       packages: write
