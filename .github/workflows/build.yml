@@ -152,7 +152,7 @@ jobs:
     steps:
       - name: Pull latest image
         run: |
-          docker pull ghcr.io/iumy/simpleflaskapp:develop
+          docker pull ghcr.io/iumy/simpleflaskapp:latest
       
       - name: Stop old container
         run: |
@@ -166,7 +166,7 @@ jobs:
             --name flask-staging `
             -p 7000:7000 `
             --restart unless-stopped `
-            ghcr.io/iumy/simpleflaskapp:develop
+            ghcr.io/iumy/simpleflaskapp:latest
       
       - name: Clean up old images
         run: docker image prune -f
