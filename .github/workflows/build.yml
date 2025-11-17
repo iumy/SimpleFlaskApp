@@ -181,6 +181,10 @@ jobs:
         run: docker image prune -f
       
       - name: Health check
+        shell: powershell 
         run: |
+          # Wait for the container to fully start
           sleep 10
-          curl -f http://${{ secrets.STAGING_HOST }}:7000/health || exit 1
+          
+          Invoke-WebRequest -Uri http://${{ secrets.STAGING_HOST }}:7000/health -Method Get -MaximumRedirection 0 -ErrorAction Stop
+          
