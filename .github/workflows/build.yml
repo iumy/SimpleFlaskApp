@@ -127,6 +127,12 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
+      - name: Export chosen image tag
+        id: export
+        run: |
+          echo "image_tag=${{ fromJSON(steps.meta.outputs.json).tags[0] }}" >> $GITHUB_OUTPUT
+
       
       - name: Image digest
         run: |
@@ -138,6 +144,9 @@ jobs:
           echo '```bash' >> $GITHUB_STEP_SUMMARY
           echo "docker pull ghcr.io/${{ steps.repo.outputs.repository }}:latest" >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
+      
+    outputs:
+        image_tag: ${{ steps.export.outputs.image_tag }}
 
  # Job 6: Deploy to Staging (Docker)
   deploy-staging:
@@ -152,7 +161,7 @@ jobs:
     steps:
       - name: Pull latest image
         run: |
-          docker pull ghcr.io/iumy/simpleflaskapp:latest
+          docker pull ${{ needs.build.outputs.image_tag }}
       
       - name: Stop old container
         run: |
@@ -166,7 +175,7 @@ jobs:
             --name flask-staging `
             -p 7000:7000 `
             --restart unless-stopped `
-            ghcr.io/iumy/simpleflaskapp:latest
+            ${{ needs.build.outputs.image_tag }}
       
       - name: Clean up old images
         run: docker image prune -f
