@@ -31,7 +31,7 @@ jobs:
           pip install -r requirements.txt || pip install flask
       
       - name: Run Black (code formatting check)
-        run: black --check --diff ToDoapp.py test_ToDoApp.py
+        run: black --check --diff ToDoApp.py test_ToDoApp.py
         continue-on-error: true
       
       - name: Run Flake8
