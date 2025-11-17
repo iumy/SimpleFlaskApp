@@ -147,7 +147,7 @@ jobs:
 
     permissions:
       contents: read
-      packages: write
+      packages: read
   
     steps:
       - name: Login to GitHub Container Registry
@@ -163,7 +163,7 @@ jobs:
           Set-Content -Path "$dockerConfig\config.json" -Value '{ "credsStore": "" }'
 
           # Login to GHCR
-          $token = "${{ secrets.GITHUB_TOKEN }}"
+          $token = "${{ secrets.GHCR_PAT }}" # <-- CHANGE MADE HERE
           $token | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
      
       - name: Pull latest image
