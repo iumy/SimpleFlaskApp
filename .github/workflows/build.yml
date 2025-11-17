@@ -144,9 +144,7 @@ jobs:
     name: Deploy to Staging (Docker self hosted)
     runs-on: self-hosted
     needs: build
-   
-    if: github.ref == 'refs/heads/development'
-    
+  
     steps:
       - name: Login to GitHub Container Registry
         run: |
