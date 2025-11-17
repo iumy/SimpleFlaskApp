@@ -151,9 +151,21 @@ jobs:
   
     steps:
       - name: Login to GitHub Container Registry
+        shell: powershell
         run: |
-          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-      
+          # Ensure Docker config folder exists
+          $dockerConfig = "$env:USERPROFILE\.docker"
+          if (!(Test-Path $dockerConfig)) {
+              New-Item -ItemType Directory -Path $dockerConfig | Out-Null
+          }
+
+          # Disable the Windows credential helper (wincred/desktop)
+          Set-Content -Path "$dockerConfig\config.json" -Value "{ `"credsStore`": `""` }"
+
+          # Login to GHCR
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
+
+     
       - name: Pull latest image
         run: |
           docker pull ghcr.io/iumy/simpleflaskapp:develop
