@@ -276,11 +276,11 @@ jobs:
             cd /tmp
             
             # Now this MUST import from the installed package
-            python -c "import app; from app import app as flask_app; print('✓ Package installed correctly')"
+            python -c "import flask-todo-app; print('✓ Package installed correctly')"
             
             # Test it actually works
             python -c "
-            from app import app as flask_app
+            from flask-todo-app import app as flask_app
             with flask_app.test_client() as client:
                 response = client.get('/health')
                 assert response.status_code == 200
