@@ -246,7 +246,7 @@ jobs:
             setup(
                 name='flask-todo-app',
                 version='1.0.0',
-                description='Flask App'',
+                description='Flask App',
                 author='Gianluca',
                 py_modules=['app'],
                 install_requires=[
