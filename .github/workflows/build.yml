@@ -1,4 +1,4 @@
-name: Flask App CI/CD Pipeline
+name: Flask App Pipeline
 
 on:
   push:
@@ -10,9 +10,9 @@ env:
   PYTHON_VERSION: '3.11'
   
 jobs:
-  # Job 1: Linting
+  # Lint code
   lint:
-    name: Code Linting
+    name: Lint
     runs-on: ubuntu-latest  
     
     steps:
@@ -30,7 +30,7 @@ jobs:
           pip install flake8 pylint black 
           pip install -r requirements.txt || pip install flask
       
-      - name: Run Black (code formatting check)
+      - name: Run Black 
         run: black --check --diff ToDoApp.py test_ToDoApp.py
         continue-on-error: true
       
@@ -42,10 +42,10 @@ jobs:
         run: |
           pylint ToDoApp.py test_ToDoApp.py --disable=C0114,C0116 || true
 
- # Job 2: Unit Tests
+ # Unit Tests
   test:
     name: Unit Tests
-    runs-on: ubuntu-latest  # Change to: self-hosted for self-hosted runner
+    runs-on: ubuntu-latest  
     needs: lint
     
     steps:
@@ -77,10 +77,10 @@ jobs:
       
       - name: Coverage Summary
         run: |
-          echo "## Test Coverage Summary" >> $GITHUB_STEP_SUMMARY
+          echo "## Test Coverage Report" >> $GITHUB_STEP_SUMMARY
           coverage report >> $GITHUB_STEP_SUMMARY || true
 
-# Job 3: SonarQube Analysis
+# SonarQube Analysis code for quality
   sonarqube:
     name: SonarQube Code Analysis
     runs-on: ubuntu-latest
@@ -118,10 +118,10 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
 
-# Job 4: Build Docker Image
+#  Build Docker Image
   build:
     name: Build Docker Image
-    runs-on: ubuntu-latest  # Change to: self-hosted for self-hosted runner
+    runs-on: ubuntu-latest
     needs: [test, sonarqube]
     permissions:
       contents: read
@@ -174,19 +174,12 @@ jobs:
       
       - name: Image digest
         run: |
-          echo "## Docker Image Built Successfully" >> $GITHUB_STEP_SUMMARY
-          echo "**Tags:**" >> $GITHUB_STEP_SUMMARY
-          echo "${{ steps.meta.outputs.tags }}" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Pull command:**" >> $GITHUB_STEP_SUMMARY
-          echo '```bash' >> $GITHUB_STEP_SUMMARY
-          echo "docker pull ghcr.io/${{ steps.repo.outputs.repository }}:latest" >> $GITHUB_STEP_SUMMARY
-          echo '```' >> $GITHUB_STEP_SUMMARY
+          echo "Docker Image Built Successfully" >> $GITHUB_STEP_SUMMARY
       
     outputs:
         image_tag: ${{ steps.export.outputs.image_tag }}
 
- # Job 6: Deploy to Staging (Docker)
+ # Staging Deploymnet on Docker
   deploy-staging:
     name: Deploy to Staging (on Docker self hosted)
     runs-on: self-hosted
@@ -221,7 +214,7 @@ jobs:
       - name: Health check
         shell: powershell 
         run: |
-          # Wait for the container to fully start
+          # Wait for the container to start
           sleep 10
           
           Invoke-WebRequest -Uri http://${{ secrets.STAGING_HOST }}:7000/health -Method Get -MaximumRedirection 0 -ErrorAction Stop
