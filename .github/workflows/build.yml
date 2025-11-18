@@ -184,6 +184,9 @@ jobs:
     name: Deploy to Staging (on Docker self hosted)
     runs-on: self-hosted
     needs: build
+    environment:
+      name: staging
+      url: http://74.235.201.128
 
     permissions:
       contents: read
