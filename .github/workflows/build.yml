@@ -321,7 +321,7 @@ jobs:
               User=***
               Group=***
               WorkingDirectory=/home/***/flask-app
-              ExecStart=/home/***/flask-app/venv/bin/gunicorn --workers 3 app:app
+              ExecStart=/home/***/flask-app/venv/bin/gunicorn --workers 3 --bind 0.0.0.0:7000 app:app
               Restart=always
 
               [Install]
@@ -329,18 +329,16 @@ jobs:
               EOF
               
               sudo systemctl daemon-reload
-
-              # Start service with systemd
               sudo systemctl start flask-app
               sudo systemctl enable flask-app
               
-              # Reload nginx
-              sudo systemctl reload nginx
+              sudo systemctl stop nginx || true
+              sudo systemctl disable nginx || true
         
         - name: Health check
           run: |
             sleep 15
-            curl -f http://${{ secrets.EC2_HOST }}/health || exit 1
+            curl -f http://${{ secrets.EC2_HOST }}:7000/health || exit 1
         
         - name: Notify deployment
           run: |
