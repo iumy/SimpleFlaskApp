@@ -262,10 +262,30 @@ jobs:
             python -m build
             echo "Build Artifacts Created" >> $GITHUB_STEP_SUMMARY
         
+        #- name: Verify package installation
+        #  run: |
+        #    pip install dist/*.whl
+        #    python -c "from flask_todo_app import app; print('Package installed successfully')"
+
         - name: Verify package installation
           run: |
+            # Install the package
             pip install dist/*.whl
-            python -c "from flask_todo_app import app; print('Package installed successfully')"
+            
+            # Move away from source code to force import from installed package
+            cd /tmp
+            
+            # Now this MUST import from the installed package
+            python -c "import app; from app import app as flask_app; print('✓ Package installed correctly')"
+            
+            # Test it actually works
+            python -c "
+            from app import app as flask_app
+            with flask_app.test_client() as client:
+                response = client.get('/health')
+                assert response.status_code == 200
+                print('✓ Health endpoint verified')
+            "
         
         - name: Check package with twine
           run: |
