@@ -265,7 +265,7 @@ jobs:
         - name: Verify package installation
           run: |
             pip install dist/*.whl
-            python -c "import app; print('Package installed successfully')"
+            python -c "from flask_todo_app import app; print('Package installed successfully')"
         
         - name: Check package with twine
           run: |
