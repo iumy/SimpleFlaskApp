@@ -281,7 +281,7 @@ jobs:
   deploy-production:
       name: Deploy to Production (EC2)
       runs-on: ubuntu-latest  
-      needs: build
+      needs: build-python
       environment:
         name: production
         url: http://107.21.85.216
@@ -312,18 +312,18 @@ jobs:
               pip install --upgrade pip
               pip install -r requirements.txt || pip install flask gunicorn
               
-              sudo cat > /etc/systemd/system/flask-app.service << EOF
+              cat << EOF | sudo tee /etc/systemd/system/flask-app.service > /dev/null
               [Unit]
               Description=Gunicorn instance for a Flask App
               After=network.target
-              
+
               [Service]
-              User=ubuntu
-              Group=ubuntu
-              WorkingDirectory=/home/ubuntu/flask-app
-              ExecStart=/home/ubuntu/flask-app/venv/bin/gunicorn --workers 3 app:app
+              User=***
+              Group=***
+              WorkingDirectory=/home/***/flask-app
+              ExecStart=/home/***/flask-app/venv/bin/gunicorn --workers 3 app:app
               Restart=always
-              
+
               [Install]
               WantedBy=multi-user.target
               EOF
