@@ -314,14 +314,14 @@ jobs:
               
               cat << EOF | sudo tee /etc/systemd/system/flask-app.service > /dev/null
               [Unit]
-              Description=Gunicorn instance for a Flask App
+              Description=Gunicorn instance for App
               After=network.target
 
               [Service]
-              User=***
-              Group=***
-              WorkingDirectory=/home/***/flask-app
-              ExecStart=/home/***/flask-app/venv/bin/gunicorn --workers 3 --bind 0.0.0.0:7000 app:app
+              User=ubuntu
+              Group=ubuntu
+              WorkingDirectory=/home/ubuntu/flask-app
+              ExecStart=/home/ubuntu/flask-app/venv/bin/gunicorn --workers 3 --bind 0.0.0.0:7000 ToDoApp:app
               Restart=always
 
               [Install]
