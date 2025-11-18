@@ -312,6 +312,24 @@ jobs:
               pip install --upgrade pip
               pip install -r requirements.txt || pip install flask gunicorn
               
+              sudo cat > /etc/systemd/system/flask-app.service << EOF
+              [Unit]
+              Description=Gunicorn instance for a Flask App
+              After=network.target
+              
+              [Service]
+              User=ubuntu
+              Group=ubuntu
+              WorkingDirectory=/home/ubuntu/flask-app
+              ExecStart=/home/ubuntu/flask-app/venv/bin/gunicorn --workers 3 app:app
+              Restart=always
+              
+              [Install]
+              WantedBy=multi-user.target
+              EOF
+              
+              sudo systemctl daemon-reload
+
               # Start service with systemd
               sudo systemctl start flask-app
               sudo systemctl enable flask-app
