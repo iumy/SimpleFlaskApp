@@ -118,7 +118,7 @@ HTML_TEMPLATE = """ <!DOCTYPE html>
         <p style="text-align: center; color: #999;">No tasks yet. Add one above!</p>
         {% endif %}
         
-        <div class="version">Version 1.0.0</div>
+        <div class="version">Version 1.1.0</div>
     </div>
 </body>
 </html>
