@@ -1,3 +1,18 @@
+"""Simple Flask To-Do application.
+
+This module implements a minimal in-memory to-do list using Flask.
+
+Routes:
+    "/" (GET)         - Render the main to-do list page.
+    "/add" (POST)     - Add a new task from form data and redirect to index.
+    "/delete/<int>" (POST) - Delete a task by index and redirect to index.
+    "/health" (GET)   - Return a small JSON health/status payload.
+
+The application stores tasks in the module-level `tasks` list and uses
+`render_template_string` with a simple HTML template defined in
+`HTML_TEMPLATE` for demonstration and testing purposes.
+"""
+
 from flask import Flask, render_template_string, request, redirect, url_for
 
 app = Flask(__name__)
@@ -6,7 +21,7 @@ app = Flask(__name__)
 tasks = []
 
 # HTML template
-HTML_TEMPLATE = """
+HTML_TEMPLATE = """  # HTML template for the main page. Kept as a module-level constant.
 <!DOCTYPE html>
 <html>
 <head>
@@ -113,11 +128,29 @@ HTML_TEMPLATE = """
 
 @app.route("/")
 def index():
+    """Render the main to-do list page.
+
+    The template is rendered from the `HTML_TEMPLATE` constant and receives
+    the current `tasks` list. The builtin `enumerate` is passed so the
+    template can show task indices for delete actions.
+
+    Returns:
+        Response: Rendered HTML page showing current tasks.
+    """
     return render_template_string(HTML_TEMPLATE, tasks=tasks, enumerate=enumerate)
 
 
 @app.route("/add", methods=["POST"])
 def add_task():
+    """Handle adding a new task submitted via POST.
+
+    Reads the `task` field from `request.form` and appends it to the
+    module-level `tasks` list if present. Redirects back to the index
+    page after processing.
+
+    Returns:
+        Response: A redirect to the index route.
+    """
     task = request.form.get("task")
     if task:
         tasks.append(task)
@@ -126,6 +159,15 @@ def add_task():
 
 @app.route("/delete/<int:task_id>", methods=["POST"])
 def delete_task(task_id):
+    """Delete a task by its integer index and redirect to index.
+
+    Args:
+        task_id (int): Index of the task to remove. If the index is out of
+            range, the function does nothing.
+
+    Returns:
+        Response: A redirect to the index route.
+    """
     if 0 <= task_id < len(tasks):
         tasks.pop(task_id)
     return redirect(url_for("index"))
@@ -133,6 +175,15 @@ def delete_task(task_id):
 
 @app.route("/health")
 def health():
+    """Return a small JSON health payload.
+
+    The payload contains a `status` string and the current number of
+    tasks tracked by the application. Designed for quick liveliness
+    and simple monitoring checks.
+
+    Returns:
+        Tuple[dict, int]: JSON-serializable dict and HTTP status code 200.
+    """
     return {"status": "healthy", "tasks_count": len(tasks)}, 200
 
 
