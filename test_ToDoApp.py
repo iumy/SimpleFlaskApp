@@ -6,8 +6,8 @@ The module provides fixtures to create a Flask test client and to ensure
 """
 # pylint: disable=redefined-outer-name
 
-import pytest
 import sys
+import pytest
 from ToDoApp import app, tasks
 
 sys.path.insert(0, ".")
