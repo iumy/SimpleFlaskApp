@@ -40,7 +40,7 @@ jobs:
       
       - name: Run Pylint
         run: |
-          pylint ToDoApp.py test_ToDoApp.py --disable=C0114,C0116 || true
+          pylint ToDoApp.py test_ToDoApp.py || true
 
  # Unit Tests
   test:
@@ -289,7 +289,7 @@ jobs:
       needs: build-python
       environment:
         name: production
-        url: http://107.21.85.216
+        url: http://ec2-3-94-61-143.compute-1.amazonaws.com/
       if: github.ref == 'refs/heads/main'
       
       steps:
