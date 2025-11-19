@@ -1,3 +1,10 @@
+"""Unit tests for the SimpleFlaskApp To-Do Flask application.
+
+These tests exercise the basic web endpoints and in-memory task storage.
+The module provides fixtures to create a Flask test client and to ensure
+`tasks` is reset between tests.
+"""
+
 import pytest
 import sys
 from ToDoApp import app, tasks
@@ -7,10 +14,15 @@ sys.path.insert(0, ".")
 
 @pytest.fixture
 def client():
-    """Create a test client for the Flask app"""
+    """Create a test client for the Flask app.
+
+    Uses Flask's `test_client()` context manager and yields a client
+    instance to tests. The inner client variable is named `test_client`
+    to avoid shadowing the fixture name (prevents W0621 warnings).
+    """
     app.config["TESTING"] = True
-    with app.test_client() as client:
-        yield client
+    with app.test_client() as test_client:
+        yield test_client
     # Clean up tasks after each test
     tasks.clear()
 
