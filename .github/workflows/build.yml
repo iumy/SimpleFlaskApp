@@ -40,7 +40,7 @@ jobs:
       
       - name: Run Pylint
         run: |
-          pylint ToDoApp.py test_ToDoApp.py --disable=C0114,C0116 || true
+          pylint ToDoApp.py test_ToDoApp.py || true
 
  # Unit Tests
   test:
