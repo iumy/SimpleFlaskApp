@@ -21,7 +21,7 @@ app = Flask(__name__)
 tasks = []
 
 # HTML template
-HTML_TEMPLATE = """  # HTML template for the main page. Kept as a module-level constant.
+HTML_TEMPLATE = """  
 <!DOCTYPE html>
 <html>
 <head>
