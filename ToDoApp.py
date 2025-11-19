@@ -21,8 +21,7 @@ app = Flask(__name__)
 tasks = []
 
 # HTML template
-HTML_TEMPLATE = """  
-<!DOCTYPE html>
+HTML_TEMPLATE = """ <!DOCTYPE html>
 <html>
 <head>
     <title>To-Do App</title>
