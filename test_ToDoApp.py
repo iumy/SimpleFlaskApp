@@ -4,6 +4,7 @@ These tests exercise the basic web endpoints and in-memory task storage.
 The module provides fixtures to create a Flask test client and to ensure
 `tasks` is reset between tests.
 """
+# pylint: disable=redefined-outer-name
 
 import pytest
 import sys
